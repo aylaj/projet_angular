@@ -10,7 +10,7 @@ import { AppareilService } from './services/appareil.service';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 
-//import { AuthGuard } from './services/auth-guard.service';
+import { AuthGuard } from './services/auth-guard.service';
 
 import { AuthComponent } from './auth/auth.component';
 import { AppareilViewComponent } from './appareil-view/appareil-view.component'; //importer les classes
@@ -22,16 +22,17 @@ import { EditAppareilComponent } from './edit-appareil/edit-appareil.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { NewUserComponent } from './new-user/new-user.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SkillsComponent } from './component/skill/skills/skills.component';
 
 
 
 const appRoutes: Routes = [
-  { path: 'appareils',   component: AppareilViewComponent },
-  { path: 'appareils/:id'  ,component: SingleAppareilComponent },
+  { path: 'appareils', canActivate: [AuthGuard],  component: AppareilViewComponent },
+  { path: 'appareils/:id', canActivate: [AuthGuard]  ,component: SingleAppareilComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'users', component: UserListComponent },
   { path: '', component: AppareilViewComponent },
-  { path: 'edit', component: EditAppareilComponent },
+  { path: 'edit', canActivate: [AuthGuard], component: EditAppareilComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: 'new-user', component: NewUserComponent },
   { path: '**',redirectTo: 'not-found'}
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
     EditAppareilComponent,
     UserListComponent,
     NewUserComponent,
+    SkillsComponent,
 
   ],
   imports: [
@@ -62,8 +64,8 @@ const appRoutes: Routes = [
     HttpClientModule,//importer le serveur back
   ],
   providers: [AppareilService,
-              AuthService, UserService
-            /*AuthGuard*/], //pour injecter les services
+              AuthService, UserService,
+            AuthGuard], //pour injecter les services
   bootstrap: [AppComponent]
 })
 export class AppModule { }
